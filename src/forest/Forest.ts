@@ -4,7 +4,11 @@ import { Engine } from "../engine/Engine";
 import * as THREE from "three";
 import { Colors } from "../Colors";
 import { Tree } from "./Tree";
-import { NorthernRedOak } from "./NorthernRedOak";
+import { QuercusRubra } from "./QuercusRubra";
+import { QuercusMontana } from "./QuercusMontana";
+import { CaryaOvata } from "./CaryaOvata";
+import { AcerRubrum } from "./AcerRubrum";
+import { LiriodendronTulipifera } from "./LiriodendronTulipifera";
 
 const footprint_width: number = 500; // meters
 const footprint_height: number = 500; // meters
@@ -62,7 +66,20 @@ export class Forest implements Experience
             let radius = 1; // meters
             let height = 2; // meters
 
-            let tree = new NorthernRedOak();
+            let pick = Math.random();
+            
+            let tree = new QuercusRubra();
+            if (pick < 0.2)
+                tree = new QuercusRubra();
+            else if (pick < 0.5)
+                tree = new QuercusMontana();
+            else if (pick < 0.6)
+                tree = new CaryaOvata();
+            else if (pick < 0.8)
+                tree = new AcerRubrum();
+            else
+                tree = new LiriodendronTulipifera();
+
             tree.buildMesh(this.engine.scene);
 
             tree.setPosition(Math.random() * footprint_width, Math.random() * footprint_height, footprint_width/2, footprint_height/2);
