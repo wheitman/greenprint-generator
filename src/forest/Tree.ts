@@ -31,6 +31,7 @@ export class Tree {
             new THREE.CylinderGeometry(this.radius_, this.radius_, this.height_),
             new THREE.MeshStandardMaterial({ color: Colors.GREEN600 })
         );
+        this.mesh.castShadow = true;
         scene.add(this.mesh);
     }
 

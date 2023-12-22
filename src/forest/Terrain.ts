@@ -12,7 +12,8 @@ export class Terrain {
     constructor(
         size: number = 100,
         cellSize = 0.4,
-        private hill_multiplier: number = 10
+        private hill_multiplier: number = 10,
+        private height_multiplier = 20
     ) {
         const geometry = new THREE.BufferGeometry();
 
@@ -42,7 +43,7 @@ export class Terrain {
                 normals.push(0, 0, 1);
 
                 _color.setHex(Colors.GREEN200);
-                _color.multiplyScalar(elevation / 5);
+                // _color.multiplyScalar(elevation / 5);
 
                 colors.push(_color.r, _color.g, _color.b);
             }
@@ -77,17 +78,19 @@ export class Terrain {
             new THREE.Float32BufferAttribute(colors, 3)
         );
 
-        const material = new THREE.MeshPhongMaterial({
+        const material = new THREE.MeshToonMaterial({
             side: THREE.DoubleSide,
             vertexColors: true,
         });
 
         this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.receiveShadow = true;
+        // this.mesh.castShadow = true;
     }
 
     public getElevation(x: number, y: number): number {
         let freq = 1 / this.hill_multiplier;
-        let height = this.noise_generator.perlin2(x * freq, y * freq) * 20 + 15;
+        let height = this.noise_generator.perlin2(x * freq, y * freq) * this.height_multiplier;
         return height;
     }
 }

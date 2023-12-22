@@ -38,7 +38,9 @@ export class AcerRubrum extends Tree {
         );
         this.mesh.add(canopy)
         canopy.position.set(0, this.height_/2, 0)
-
+        
+        canopy.castShadow = true;
+        this.mesh.castShadow = true;
         // this.mesh.add()
 
         scene.add(this.mesh);

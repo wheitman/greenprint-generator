@@ -26,11 +26,12 @@ export class LiriodendronTulipifera extends Tree {
             new THREE.CylinderGeometry(TRUNK_RADIUS, TRUNK_RADIUS, this.height_),
             new THREE.MeshToonMaterial({ color: Colors.BROWN })
         );
+        this.mesh.castShadow = true;
         this.mesh.add(canopy)
         canopy.position.set(0, this.height_/2, 0)
+        canopy.castShadow = true;
 
-        // this.mesh.add()
-
+        this.mesh.castShadow = true;
         scene.add(this.mesh);
     }
 }

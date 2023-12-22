@@ -39,8 +39,8 @@ export class CaryaOvata extends Tree {
         this.mesh.add(canopy)
         canopy.position.set(0, this.height_/2, 0)
 
-        // this.mesh.add()
-
+        canopy.castShadow = true;
+        this.mesh.castShadow = true;
         scene.add(this.mesh);
     }
 }

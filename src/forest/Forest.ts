@@ -14,7 +14,7 @@ import { Terrain } from "./Terrain";
 const forest_size: number = 350; // meters
 
 export class Forest implements Experience {
-    terrain = new Terrain(forest_size + 20, 0.4, 80);
+    terrain = new Terrain(forest_size + 20, 0.4, 120, 40);
     resources: Resource[] = [];
 
     constructor(private engine: Engine) {}
@@ -36,23 +36,45 @@ export class Forest implements Experience {
         );
 
         // Lighting
-        const dirLight1 = new THREE.DirectionalLight(0xffffff, 2);
-        dirLight1.position.set(1, 1, 1);
-        this.engine.scene.add(dirLight1);
+        let scene = this.engine.scene;
 
-        // const dirLight2 = new THREE.DirectionalLight( 0x002288, 1 );
-        // dirLight2.position.set( - 1, - 1, - 1 );
-        // this.engine.scene.add( dirLight2 );
+        const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 2 );
+        hemiLight.color.setHSL( 0.6, 1, 0.6 );
+        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+        hemiLight.position.set( 0, 300, 0 );
+        scene.add( hemiLight );
 
-        const dirLight3 = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight3.position.set(-10, 10, -10);
-        this.engine.scene.add(dirLight3);
+        const hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
+        scene.add( hemiLightHelper );
 
-        const ambientLight = new THREE.AmbientLight(0x555555);
-        this.engine.scene.add(ambientLight);
+        //
+
+        const dirLight = new THREE.DirectionalLight( 0xffffff, 3 );
+        dirLight.color.setHSL( 0.1, 1, 0.95 );
+        dirLight.position.set( - 50, 75, 40 );
+        dirLight.position.multiplyScalar( 30 );
+        scene.add( dirLight );
+
+        dirLight.castShadow = true;
+
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+
+        const d = 1000;
+
+        dirLight.shadow.camera.left = - d;
+        dirLight.shadow.camera.right = d;
+        dirLight.shadow.camera.top = d;
+        dirLight.shadow.camera.bottom = - d;
+
+        dirLight.shadow.camera.far = 6000;
+        dirLight.shadow.bias = - 0.0001;
+
+        const dirLightHelper = new THREE.DirectionalLightHelper( dirLight, 10 );
+        scene.add( dirLightHelper );
 
         // Generate the forest
-        this.generateTrees(10);
+        this.generateTrees(100);
 
         // Add the terrain
         this.engine.scene.add(this.terrain.mesh);

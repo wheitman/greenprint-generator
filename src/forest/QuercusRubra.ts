@@ -39,7 +39,9 @@ export class QuercusRubra extends Tree {
         );
         this.mesh.add(canopy);
         canopy.position.set(0, this.height_ / 2, 0);
+        canopy.castShadow = true;
 
+        this.mesh.castShadow = true;
         scene.add(this.mesh);
     }
 }
