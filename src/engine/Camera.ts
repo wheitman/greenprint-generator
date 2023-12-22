@@ -30,7 +30,7 @@ export class Camera implements GameEntity {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = false;
-    this.controls.minDistance = 200;
+    this.controls.minDistance = 100;
     this.controls.maxDistance = 500;
     this.controls.maxPolarAngle = Math.PI / 2;
 

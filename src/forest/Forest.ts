@@ -9,6 +9,7 @@ import { QuercusMontana } from "./QuercusMontana";
 import { CaryaOvata } from "./CaryaOvata";
 import { AcerRubrum } from "./AcerRubrum";
 import { LiriodendronTulipifera } from "./LiriodendronTulipifera";
+import { Terrain } from "./Terrain";
 
 const footprint_width: number = 500; // meters
 const footprint_height: number = 500; // meters
@@ -28,7 +29,7 @@ export class Forest implements Experience
         );
 
         plane.receiveShadow = true;
-        this.engine.scene.add(plane);
+        // this.engine.scene.add(plane);
         plane.position.set(0, 0, 0)
         plane.setRotationFromAxisAngle(new THREE.Vector3(1,0,0), -Math.PI / 2)
 
@@ -49,7 +50,11 @@ export class Forest implements Experience
         this.engine.scene.add( ambientLight );
 
         // Generate the forest
-        this.generateTrees();
+        // this.generateTrees();
+
+        // Add the terrain
+        let terrain = new Terrain();
+        this.engine.scene.add(terrain.mesh);
 
         // Axes helpher ;)
         const axesHelper = new THREE.AxesHelper( 3 );
