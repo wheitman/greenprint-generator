@@ -34,15 +34,17 @@ export class Terrain {
                 const x = j * segmentSize - halfSize;
                 let noise = new Noise();
                 let freq = 0.04;
-                let height = noise.perlin2(x * freq,y * freq) * 10;
+                let height = noise.perlin2(x * freq,y * freq) * 10 + 10;
 
                 vertices.push(x, height, -y);
                 normals.push(0, 0, 1);
 
-                const r = x / size + 0.5;
-                const g = y / size + 0.5;
+                const r = x / size + 1.0;
+                const g = y / size + 1.0;
 
-                _color.setRGB(r, g, 1, THREE.SRGBColorSpace);
+                // _color.setRGB(0.5, 1, 0.7, THREE.SRGBColorSpace);
+                _color.setHex(Colors.GREEN200);
+                _color.multiplyScalar(height / 5)
 
                 colors.push(_color.r, _color.g, _color.b);
             }
@@ -75,14 +77,14 @@ export class Terrain {
             "normal",
             new THREE.Float32BufferAttribute(normals, 3)
         );
-        // geometry.setAttribute(
-        //     "color",
-        //     new THREE.Float32BufferAttribute(colors, 3)
-        // );
+        geometry.setAttribute(
+            "color",
+            new THREE.Float32BufferAttribute(colors, 3)
+        );
 
         const material = new THREE.MeshPhongMaterial({
             side: THREE.DoubleSide,
-            color: Colors.GREEN200
+            vertexColors: true,
         });
 
         this.mesh = new THREE.Mesh(geometry, material);
