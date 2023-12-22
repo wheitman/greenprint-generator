@@ -30,7 +30,7 @@ export class Camera implements GameEntity {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
     this.controls.screenSpacePanning = false;
-    this.controls.minDistance = 100;
+    this.controls.minDistance = 300;
     this.controls.maxDistance = 500;
     this.controls.maxPolarAngle = Math.PI / 2;
 
@@ -46,7 +46,6 @@ export class Camera implements GameEntity {
   
   update() {
     this.controls.update()
-    console.log(this.instance.rotation)
     // this.instance.setRotationFromAxisAngle(new THREE.Vector3(1,0,0), Math.PI/6)
     // this.instance.rotation.setFromVector3(new THREE.Vector3(Math.PI/3,0,0))
   }

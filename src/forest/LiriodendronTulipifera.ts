@@ -33,9 +33,4 @@ export class LiriodendronTulipifera extends Tree {
 
         scene.add(this.mesh);
     }
-
-    public setPosition(x: number, y: number, origin_x: number = 50, origin_y: number = 50): void 
-    {
-        this.mesh.position.set(x - origin_x, this.height_/2, y - origin_y);
-    }
 }

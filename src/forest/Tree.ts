@@ -34,8 +34,11 @@ export class Tree {
         scene.add(this.mesh);
     }
 
-    public setPosition(x: number, y: number, origin_x: number = 50, origin_y: number = 50): void 
-    {
-        this.mesh.position.set(x - origin_x, this.height_/2, y - origin_y);
+    public setPosition(
+        x: number,
+        y: number,
+        elevation: number = 0
+    ): void {
+        this.mesh.position.set(x, this.height_ / 2 + elevation, y);
     }
 }
