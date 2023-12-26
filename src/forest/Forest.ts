@@ -34,13 +34,20 @@ class TreePosition {
 
 export class Forest implements Experience {
     forest_size: number = 350; // meters
-    terrain = new Terrain(this.forest_size + 20, 0.4, 200, 60);
     resources: Resource[] = [];
     tree_positions: TreePosition[] = [];
 
     gui = new GUI();
 
     tree_count = 300;
+    hill_height = 60;
+    hill_spacing = 200;
+    terrain = new Terrain(
+        this.forest_size + 20,
+        0.4,
+        this.hill_spacing,
+        this.hill_height
+    );
 
     constructor(private engine: Engine) {}
 
@@ -59,18 +66,31 @@ export class Forest implements Experience {
         axesHelper.scale.set(10, 10, 10);
 
         // GUI setup
-        this.gui.add(this, 'tree_count', 50, 3000, 50).onFinishChange(() => {
-            this.clearForest()
-            this.addTrees(this.tree_count)
-        })
+        this.gui.add(this, "tree_count", 50, 3000, 50).onFinishChange(() => {
+            this.clearForest();
+            this.addTrees(this.tree_count);
+        });
 
-        this.gui.add(this, 'forest_size', 100, 500, 100).onFinishChange(() => {
-            this.engine.scene.remove(this.terrain.mesh)
+        this.gui.add(this, "forest_size", 100, 500, 100).onFinishChange(() => {
+            this.engine.scene.remove(this.terrain.mesh);
             this.terrain = new Terrain(this.forest_size + 20, 0.4, 200, 60);
             this.engine.scene.add(this.terrain.mesh);
-            this.clearForest()
-            this.addTrees(this.tree_count)
-        })
+            this.clearForest();
+            this.addTrees(this.tree_count);
+        });
+
+        this.gui.add(this, "hill_height", 0, 200, 10).onFinishChange(() => {
+            this.engine.scene.remove(this.terrain.mesh);
+            this.terrain = new Terrain(
+                this.forest_size + 20,
+                0.4,
+                200,
+                this.hill_height
+            );
+            this.engine.scene.add(this.terrain.mesh);
+            this.clearForest();
+            this.addTrees(this.tree_count);
+        });
     }
 
     addLighting() {
@@ -143,12 +163,11 @@ export class Forest implements Experience {
             this.engine.scene.remove(mesh);
             mesh.geometry.dispose();
             mesh = undefined;
-        })
+        });
         this.tree_positions = [];
     }
 
     async addTrees(tree_count: number = 100) {
-
         let failed_spawns = 0;
 
         let emergent_proportion = 0.1; // 10% of all trees
@@ -162,7 +181,9 @@ export class Forest implements Experience {
         let current_canopy_count = 0;
 
         let understory_proportion = 1 - emergent_proportion - canopy_proportion; // 10% of all trees
-        let desired_understory_count = Math.ceil(tree_count * understory_proportion);
+        let desired_understory_count = Math.ceil(
+            tree_count * understory_proportion
+        );
         let current_understory_count = 0;
 
         // Start with emergent trees -- the tallest ones
@@ -192,9 +213,9 @@ export class Forest implements Experience {
             }
 
             if (failed_spawns > tree_count * 10) {
-                console.error(
-                    "Max spawn attempts exceeded. Is your target tree count too high for the provided space?"
-                );
+                // console.error(
+                //     "Max spawn attempts exceeded. Is your target tree count too high for the provided space?"
+                // );
                 break;
             }
         }
@@ -234,9 +255,6 @@ export class Forest implements Experience {
             }
 
             if (failed_spawns > tree_count * 10) {
-                console.error(
-                    "Max spawn attempts exceeded. Is your target tree count too high for the provided space?"
-                );
                 break;
             }
         }
@@ -274,9 +292,6 @@ export class Forest implements Experience {
             }
 
             if (failed_spawns > tree_count * 10) {
-                console.error(
-                    "Max spawn attempts exceeded. Is your target tree count too high for the provided space?"
-                );
                 break;
             }
         }

@@ -10,7 +10,7 @@ new Engine({
     // twitter: 'https://twitter.com/maya_ndljk',
     // github: 'https://github.com/mayacoda/simple-threejs-typescript-starter',
     // description: 'A simple Three.js + Typescript + Vite starter project',
-    // documentTitle: 'Three.js + Typescript + Vite',
-    // title: 'A cube on a plane',
+    documentTitle: 'Forest simulator',
+    // title: 'Forest simulator',
   },
 })
