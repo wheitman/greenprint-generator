@@ -3,6 +3,7 @@ import * as THREE from "three";
 
 export class Tree {
     public mesh: THREE.Mesh;
+    public hitbox: THREE.Mesh;
     protected height_: number;
     protected radius_: number;
     protected x_: number;
@@ -25,6 +26,13 @@ export class Tree {
 
     }
 
+    public getHitbox() {
+        let hitbox = new THREE.Mesh(
+            new THREE.CylinderGeometry(this.radius_, this.radius_, this.height_),
+            new THREE.MeshStandardMaterial({ color: Colors.GREEN600 })
+        )
+    }
+
     public buildMesh(scene: THREE.Scene): void
     {
         this.mesh = new THREE.Mesh(
@@ -37,9 +45,9 @@ export class Tree {
 
     public setPosition(
         x: number,
-        y: number,
+        z: number,
         elevation: number = 0
     ): void {
-        this.mesh.position.set(x, this.height_ / 2 + elevation, y);
+        this.mesh.position.set(x, this.height_ / 2 + elevation, z);
     }
 }

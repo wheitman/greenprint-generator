@@ -1,17 +1,17 @@
-import { Colors } from "../Colors";
+import { Colors } from "../../Colors";
 import * as THREE from "three";
-import { Tree } from "./Tree";
+import { Tree } from "../Tree";
 
 /**
- * Carya ovata (shagbark hickory)
+ * Acer rubrum (red maple)
  */
 
-export class CaryaOvata extends Tree {
+export class AcerRubrum extends Tree {
     // private height_: number;
     // private radius_: number;
     // private x_: number;
     // private y_: number;
-    constructor(radius: number = 10, height: number = 35) 
+    constructor(radius: number = 25, height: number = 35) 
     {
         super(radius, height);
         
@@ -23,11 +23,11 @@ export class CaryaOvata extends Tree {
         // )
     }
 
-    public buildMesh(scene: THREE.Scene): void
+    public buildMesh(): THREE.Mesh
     {
         let canopy = new THREE.Mesh(
-            new THREE.CapsuleGeometry(this.radius_, this.height_/2 - this.radius_),
-            new THREE.MeshToonMaterial({ color: Colors.GREEN800 })
+            new THREE.CapsuleGeometry(this.radius_, this.height_ - this.radius_),
+            new THREE.MeshToonMaterial({ color: Colors.ROSE800 })
         );
 
         const TRUNK_RADIUS = 4;
@@ -38,9 +38,11 @@ export class CaryaOvata extends Tree {
         );
         this.mesh.add(canopy)
         canopy.position.set(0, this.height_/2, 0)
-
+        
         canopy.castShadow = true;
         this.mesh.castShadow = true;
-        scene.add(this.mesh);
+        // this.mesh.add()
+
+        return this.mesh;
     }
 }

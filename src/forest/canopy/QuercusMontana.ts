@@ -1,13 +1,17 @@
-import { Colors } from "../Colors";
+import { Colors } from "../../Colors";
 import * as THREE from "three";
-import { Tree } from "./Tree";
+import { Tree } from "../Tree";
 
-export class QuercusRubra extends Tree {
+/**
+ * Quercus montana (chestnut oak)
+ */
+
+export class QuercusMontana extends Tree {
     // private height_: number;
     // private radius_: number;
     // private x_: number;
     // private y_: number;
-    constructor(radius: number = 15, height: number = 25) {
+    constructor(radius: number = 10, height: number = 30) {
         super(radius, height);
 
         // this.mesh =
@@ -18,13 +22,13 @@ export class QuercusRubra extends Tree {
         // )
     }
 
-    public buildMesh(scene: THREE.Scene): void {
+    public buildMesh(): THREE.Mesh {
         let canopy = new THREE.Mesh(
             new THREE.CapsuleGeometry(
                 this.radius_,
-                this.height_ - this.radius_
+                this.height_ / 2 - this.radius_
             ),
-            new THREE.MeshToonMaterial({ color: Colors.RED800 })
+            new THREE.MeshToonMaterial({ color: Colors.GREEN600 })
         );
 
         const TRUNK_RADIUS = 4;
@@ -42,6 +46,6 @@ export class QuercusRubra extends Tree {
         canopy.castShadow = true;
 
         this.mesh.castShadow = true;
-        scene.add(this.mesh);
+        return this.mesh;
     }
 }
