@@ -1,6 +1,4 @@
 import './info.scss'
-import twitterLogo from '../../../assets/twitter.png'
-import githubLogo from '../../../assets/github.png'
 
 export type InfoConfig = {
   twitter?: string

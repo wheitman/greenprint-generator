@@ -14,12 +14,17 @@ import { AmelanchierArborea } from "./understory/AmelanchierArborea";
 import { NyssaSylvatica } from "./understory/NyssaSylvatica";
 import GUI from "lil-gui";
 
-const meshes: THREE.Mesh[] = [];
+let meshes: THREE.Mesh[] = [];
 
 enum ForestLayer {
     UNDERSTORY = 1,
     CANOPY = 2,
     EMERGENT = 3,
+}
+
+declare global {
+    var tree_count: number;
+    var percent_of_target: number;
 }
 
 class TreePosition {
@@ -39,7 +44,7 @@ export class Forest implements Experience {
 
     gui = new GUI();
 
-    tree_count = 300;
+    target_tree_count = 300;
     hill_height = 60;
     hill_spacing = 200;
     terrain = new Terrain(
@@ -55,7 +60,7 @@ export class Forest implements Experience {
         this.addLighting();
 
         // Generate the forest
-        this.addTrees(this.tree_count);
+        this.addTrees(this.target_tree_count);
 
         // Add the terrain
         this.engine.scene.add(this.terrain.mesh);
@@ -66,9 +71,10 @@ export class Forest implements Experience {
         axesHelper.scale.set(10, 10, 10);
 
         // GUI setup
-        this.gui.add(this, "tree_count", 50, 3000, 50).onFinishChange(() => {
+        this.gui.add(this, "target_tree_count", 50, 3000, 50).onFinishChange(() => {
             this.clearForest();
-            this.addTrees(this.tree_count);
+            this.addTrees(this.target_tree_count);
+            this.updateInfoUI();
         });
 
         this.gui.add(this, "forest_size", 100, 500, 100).onFinishChange(() => {
@@ -76,7 +82,8 @@ export class Forest implements Experience {
             this.terrain = new Terrain(this.forest_size + 20, 0.4, 200, 60);
             this.engine.scene.add(this.terrain.mesh);
             this.clearForest();
-            this.addTrees(this.tree_count);
+            this.addTrees(this.target_tree_count);
+            this.updateInfoUI();
         });
 
         this.gui.add(this, "hill_height", 0, 200, 10).onFinishChange(() => {
@@ -89,8 +96,11 @@ export class Forest implements Experience {
             );
             this.engine.scene.add(this.terrain.mesh);
             this.clearForest();
-            this.addTrees(this.tree_count);
+            this.addTrees(this.target_tree_count);
+            this.updateInfoUI();
         });
+
+        this.updateInfoUI();
     }
 
     addLighting() {
@@ -132,6 +142,15 @@ export class Forest implements Experience {
         // scene.add(dirLightHelper);
     }
 
+    updateInfoUI(): void {
+        const collection = document.getElementsByClassName("info-container");
+
+        let info_ui: Element = collection[0];
+
+        info_ui.innerHTML = `${meshes.length} trees. About ${10*meshes.length} kg CO2/year (conservatively). \n
+        Use Shift (or two fingers) to rotate.`;
+    }
+
     treeHasSpace(tree_pos: TreePosition): boolean {
         let has_space = true;
         this.tree_positions.forEach((other_pos: TreePosition) => {
@@ -165,6 +184,7 @@ export class Forest implements Experience {
             mesh = undefined;
         });
         this.tree_positions = [];
+        meshes = [];
     }
 
     async addTrees(tree_count: number = 100) {
@@ -212,7 +232,7 @@ export class Forest implements Experience {
                 failed_spawns++;
             }
 
-            if (failed_spawns > tree_count * 10) {
+            if (failed_spawns > tree_count * 100) {
                 // console.error(
                 //     "Max spawn attempts exceeded. Is your target tree count too high for the provided space?"
                 // );
@@ -254,7 +274,7 @@ export class Forest implements Experience {
                 failed_spawns++;
             }
 
-            if (failed_spawns > tree_count * 10) {
+            if (failed_spawns > tree_count * 100) {
                 break;
             }
         }
@@ -291,37 +311,13 @@ export class Forest implements Experience {
                 failed_spawns++;
             }
 
-            if (failed_spawns > tree_count * 10) {
+            if (failed_spawns > tree_count * 100) {
                 break;
             }
         }
 
-        // while (this.tree_positions.length < tree_count) {}
-
-        // for (let i = 0; i < tree_count; i++) {
-        //     let pick = Math.random();
-
-        //     let tree;
-        //     if (pick < 0.2) tree = new QuercusRubra();
-        //     else if (pick < 0.5) tree = new QuercusMontana();
-        //     else if (pick < 0.6) tree = new CaryaOvata();
-        //     else if (pick < 0.8) tree = new AcerRubrum();
-        //     else tree = new LiriodendronTulipifera();
-
-        //     tree.buildMesh(this.engine.scene);
-
-        //     let pos_x = Math.random() * forest_size - forest_size / 2;
-        //     let pos_z = Math.random() * forest_size - forest_size / 2;
-        //     let elev = this.terrain.getElevation(pos_x, pos_z);
-
-        //     if (!this.treeHasSpace(pos_x, pos_z)) {
-        //         this.tree_positions.push(
-        //             new TreePosition(pos_x, pos_z, 1, 1, ForestLayer.CANOPY)
-        //         );
-        //     }
-
-        //     tree.setPosition(pos_x, pos_z, elev);
-        // }
+        globalThis.tree_count = meshes.length;
+        globalThis.percent_of_target = meshes.length / this.target_tree_count;
     }
 
     resize(): void {}
